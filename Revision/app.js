@@ -5,18 +5,24 @@ const app = express();
 app.listen("8081", () => {
   console.log("App is listening on port number 8081");
 });
+
 app.use(express.json());
+app.use(express.json());
+app.use(express.static("Frontend_folder"));
+
 let content = JSON.parse(fs.readFileSync("./data.json"));
 
 const authRouter = express.Router();
 const userRouter = express.Router();
 
-app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/auth", authRouter);
 
-authRouter.route("/signup").post(bodyChecker, signupUser);
+authRouter.route("/signup")
+    .post(bodyChecker, signupUser);
 
-authRouter.route("/login").post(bodyChecker, loginUser);
+authRouter.route("/login")
+    .post(bodyChecker, loginUser);
 
 function bodyChecker(req, res, next) {
   // middle ware function
@@ -75,90 +81,107 @@ function loginUser(req, res, next) {
   }
 }
 
-app.use(()=>{
-    res.status(404).sendFile(path.join(__dirname,"./404.html"));
+app.use(function(req,res){
+    res.status(404).sendFile(__dirname+"/404.html");
 })
 
-// // app.get("/", getUser);
-// // app.post("/user", createUser);
 
-// // function getUser(req, res, next) {
-// //   console.log("inside getUser");
-// //   res.send({
-// //     message: content,
-// //   });
-// // }
 
-// // function createUser(req, res, next) {
-// //   let body = req.body;
+// // // app.get("/", getUser);
+// // // app.post("/user", createUser);
 
-// //   for (let key in content) {
-// //     body[key] = content[key];
-// //   }
-// //   res.json({
-// //     message: body,
-// //   });
-// // }
+// // // function getUser(req, res, next) {
+// // //   console.log("inside getUser");
+// // //   res.send({
+// // //     message: content,
+// // //   });
+// // // }
 
-// // let content = {
-// //     "name" : "kan"
-// // }
+// // // function createUser(req, res, next) {
+// // //   let body = req.body;
 
-// // let body = {
-// //     "age": "023",
-// //     "name": "afds"
-// // }
+// // //   for (let key in content) {
+// // //     body[key] = content[key];
+// // //   }
+// // //   res.json({
+// // //     message: body,
+// // //   });
+// // // }
 
-// // for(let key in content){
-// //     body[key] = content[key];
-// // }
+// // // let content = {
+// // //     "name" : "kan"
+// // // }
 
-// // console.log(body);
+// // // let body = {
+// // //     "age": "023",
+// // //     "name": "afds"
+// // // }
 
-// // let a = ["name", "john"]
-// // let[john, name] = a;
+// // // for(let key in content){
+// // //     body[key] = content[key];
+// // // }
 
-// // console.log("john",name);
-// // console.log("name",john);
+// // // console.log(body);
 
-// // let options = {
-// //     breadth: 500,
-// //     width: 100,
-// //     height: 200
-// //   };
+// // // let a = ["name", "john"]
+// // // let[john, name] = a;
 
-// // let {a, b, c} = options;
+// // // console.log("john",name);
+// // // console.log("name",john);
 
-// // console.log("breadth",a);
-// // console.log("width",b);
-// // console.log("height",c);
+// // // let options = {
+// // //     breadth: 500,
+// // //     width: 100,
+// // //     height: 200
+// // //   };
 
-// --------------------------------------------------------
+// // // let {a, b, c} = options;
 
-// find-> returs first matching elt otherwise null(if doesn't match)
+// // // console.log("breadth",a);
+// // // console.log("width",b);
+// // // console.log("height",c);
 
-// let obj = [
+// // --------------------------------------------------------
 
-//     {
-//           email : "abc@gmail.com",
-//           age : 1
-//     }  ,
-//     {
-//         email : "aa@gmail.com",
-//         age : 2
-//     }
+// // find-> returs first matching elt otherwise null(if doesn't match)
 
-// ]
+// // let obj = [
 
-// let email  = "adewa@gmail.com"
+// //     {
+// //           email : "abc@gmail.com",
+// //           age : 1
+// //     }  ,
+// //     {
+// //         email : "aa@gmail.com",
+// //         age : 2
+// //     }
 
-//     let objectReturnedByFind = obj.find((obj)=>{
-//         return obj.email == email;
-//     })
-//     // console.log( typeof(objectReturnedByFind) );
-//     if(objectReturnedByFind != undefined){
-//         console.log("Not undefined ",objectReturnedByFind);
+// // ]
 
-//     } else{
-//         console.log("undefined ",objectReturnedByFind);
-//     }
+// // let email  = "adewa@gmail.com"
+
+// //     let objectReturnedByFind = obj.find((obj)=>{
+// //         return obj.email == email;
+// //     })
+// //     // console.log( typeof(objectReturnedByFind) );
+// //     if(objectReturnedByFind != undefined){
+// //         console.log("Not undefined ",objectReturnedByFind);
+
+// //     } else{
+// //         console.log("undefined ",objectReturnedByFind);
+// //     }
+
+
+// const axios = require("axios");
+// (async function test(){
+//     let user = await axios.post('/user', { firstName: 'Fred', lastName: 'Flintstone'})
+//     console.log(user);
+// })();
+
+
+//   .then(function (response) {
+//     console.log(response);
+//   })
+//   .catch(function (error) {
+//     console.log(error);
+//   });
