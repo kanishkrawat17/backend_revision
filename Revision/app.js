@@ -8,7 +8,7 @@ app.listen("8081", () => {
 
 app.use(express.json());
 app.use(express.json());
-app.use(express.static("Frontend_folder"));
+app.use(express.static("Frontend-folder"));
 
 let content = JSON.parse(fs.readFileSync("./data.json"));
 
@@ -67,7 +67,7 @@ function loginUser(req, res, next) {
     if (obj.password == password) {
       res.send({
         message: "you have acces, correct email and pswrd",
-        userDetails,
+        obj,
       });
     } else {
       res.send({
