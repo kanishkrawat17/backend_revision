@@ -1,13 +1,20 @@
 const express = require("express");
 const fs = require("fs");
 const app = express();
+const jwt = require('jsonwebtoken');
+const {JWT_SECRET} = require("./secrets.js");
+const cookieParser = require('cookie-parser')
+
+ 
+
+
 
 app.listen("8081", () => {
   console.log("App is listening on port number 8081");
 });
 
 app.use(express.json());
-app.use(express.json());
+app.use(cookieParser())
 app.use(express.static("Frontend-folder"));
 
 let content = JSON.parse(fs.readFileSync("./data.json"));
@@ -23,6 +30,9 @@ authRouter.route("/signup")
 
 authRouter.route("/login")
     .post(bodyChecker, loginUser);
+
+userRouter.route("/")
+    .get(protectRoute,getUsers)
 
 function bodyChecker(req, res, next) {
   // middle ware function
@@ -59,14 +69,18 @@ function loginUser(req, res, next) {
   let userDetails = req.body;
   let { email, password } = userDetails;
 
+  
   let obj = content.find((obj) => {
     return obj.email == email;
   });
-
+  
   if (obj != undefined) {
     if (obj.password == password) {
+      const token = jwt.sign({ obj: obj.email }, JWT_SECRET);
+      console.log("80",token);
+      res.cookie('jwt',token)
       res.send({
-        message: "you have acces, correct email and pswrd",
+        message: "you have acces,correct email and pswrd",
         obj,
       });
     } else {
@@ -79,6 +93,33 @@ function loginUser(req, res, next) {
       message: "User not found",
     });
   }
+}
+
+function protectRoute(req,res,next){
+  try{
+    console.log("99",req.cookies);
+    let decryptedToken = jwt.verify(req.cookies.jwt, JWT_SECRET);
+    console.log("101",decryptedToken);
+    
+    if(decryptedToken){
+      next();
+    } else{
+      res.send({
+        message : "kindly login to access this resource "
+      })
+    }
+  }
+  catch(err){
+    res.send({
+      message:err.message
+    })
+  }
+}
+
+function getUsers(req,res){
+  res.json({
+    content
+  })
 }
 
 app.use(function(req,res){
