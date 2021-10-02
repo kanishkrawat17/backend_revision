@@ -4,10 +4,8 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const {JWT_SECRET} = require("./secrets.js");
 const cookieParser = require('cookie-parser')
-
+const userModel = require("./model/userModel")
  
-
-
 
 app.listen("8081", () => {
   console.log("App is listening on port number 8081");
@@ -46,23 +44,21 @@ function bodyChecker(req, res, next) {
   }
 }
 
-function signupUser(req, res) {
-  let { name, email, password, confirmPassword } = req.body;
-  console.log("req.body", req.body);
-  if (password == confirmPassword) {
-    let newUser = { name, email, password };
-    // entry put
-    content.push(newUser);
-    // save in the datastorage
-    fs.writeFileSync("./data.json", JSON.stringify(content));
-    res.status(201).json({
-      createdUser: newUser,
-    });
-  } else {
-    res.status(422).json({
-      message: "password and confirm password do not match",
-    });
-  }
+async function signupUser(req, res) {
+  
+    try {
+        let document =  await userModel.create(req.body)
+        res.status(200).json({
+          message : "User created successfullt",
+          user : document
+        })
+      }
+      catch(err){
+        console.log("57",err.message);
+        res.status(500).send({
+          message :err.message
+        })
+      }
 }
 
 function loginUser(req, res, next) {
@@ -110,6 +106,7 @@ function protectRoute(req,res,next){
     }
   }
   catch(err){
+    console.log("108",err.message);
     res.send({
       message:err.message
     })
