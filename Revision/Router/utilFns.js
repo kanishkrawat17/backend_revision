@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const {JWT_SECRET} = require("../secrets");
+const {JWT_SECRET} = require("../../secrets");
 
 module.exports.protectRoute=function (req,res,next){
     try{
