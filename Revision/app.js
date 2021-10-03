@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const app = express();
 const jwt = require('jsonwebtoken');
-const {JWT_SECRET} = require("../secrets.js");
+const {JWT_SECRET} = require("./secrets.js");
 const cookieParser = require('cookie-parser')
 const userModel = require("./model/userModel")
  

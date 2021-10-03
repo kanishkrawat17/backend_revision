@@ -1,2 +1,5 @@
-.Revision/secrets.js
-node_modules
+# dependecies
+/node_modules
+
+# Secrets
+secrets.js
