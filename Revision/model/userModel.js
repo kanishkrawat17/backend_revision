@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema(
     }
   }
 )
-
+userSchema.pre()
 const userModel = mongoose.model('userModel', userSchema);
 
 module.exports=userModel;

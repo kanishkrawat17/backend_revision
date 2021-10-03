@@ -15,51 +15,16 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(express.static("Frontend-folder"));
 
-let content = JSON.parse(fs.readFileSync("./data.json"));
-
-const authRouter = express.Router();
-const userRouter = express.Router();
-
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
 
-authRouter.route("/signup")
-    .post(bodyChecker, signupUser);
 
-authRouter.route("/login")
-    .post(bodyChecker, loginUser);
 
 userRouter.route("/")
     .get(protectRoute,getUsers)
 
-function bodyChecker(req, res, next) {
-  // middle ware function
-  console.log("reached body checker");
-  let isPresent = Object.keys(req.body).length;
-  console.log("ispresent", isPresent);
-  if (isPresent) {
-    next();
-  } else {
-    res.send("kind send details in body ");
-  }
-}
 
-async function signupUser(req, res) {
-  
-    try {
-        let document =  await userModel.create(req.body)
-        res.status(200).json({
-          message : "User created successfullt",
-          user : document
-        })
-      }
-      catch(err){
-        console.log("57",err.message);
-        res.status(500).send({
-          message :err.message
-        })
-      }
-}
+
 
 function loginUser(req, res, next) {
   let userDetails = req.body;
@@ -91,27 +56,6 @@ function loginUser(req, res, next) {
   }
 }
 
-function protectRoute(req,res,next){
-  try{
-    console.log("99",req.cookies);
-    let decryptedToken = jwt.verify(req.cookies.jwt, JWT_SECRET);
-    console.log("101",decryptedToken);
-    
-    if(decryptedToken){
-      next();
-    } else{
-      res.send({
-        message : "kindly login to access this resource "
-      })
-    }
-  }
-  catch(err){
-    console.log("108",err.message);
-    res.send({
-      message:err.message
-    })
-  }
-}
 
 function getUsers(req,res){
   res.json({
