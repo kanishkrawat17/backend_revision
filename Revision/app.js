@@ -1,11 +1,15 @@
-const express = require("express");
-const fs = require("fs");
-const app = express();
 const jwt = require('jsonwebtoken');
 const {JWT_SECRET} = require("./secrets.js");
-const cookieParser = require('cookie-parser')
 const userModel = require("./model/userModel")
- 
+
+
+
+const express = require("express");//1
+const app = express();
+const fs = require("fs");//1
+const cookieParser = require('cookie-parser')//1
+const userRouter = require("./Router/userRouter") 
+const authRouter = require("./Router/authRouter") 
 
 app.listen("8081", () => {
   console.log("App is listening on port number 8081");
@@ -15,57 +19,82 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(express.static("Frontend-folder"));
 
-app.use("/user", userRouter);
-app.use("/auth", authRouter);
-
-
-
-userRouter.route("/")
-    .get(protectRoute,getUsers)
-
-
-
-
-function loginUser(req, res, next) {
-  let userDetails = req.body;
-  let { email, password } = userDetails;
-
-  
-  let obj = content.find((obj) => {
-    return obj.email == email;
-  });
-  
-  if (obj != undefined) {
-    if (obj.password == password) {
-      const token = jwt.sign({ obj: obj.email }, JWT_SECRET);
-      console.log("80",token);
-      res.cookie('jwt',token)
-      res.send({
-        message: "you have acces,correct email and pswrd",
-        obj,
-      });
-    } else {
-      res.send({
-        message: "Invalid password or email",
-      });
-    }
-  } else {
-    return res.status(404).json({
-      message: "User not found",
-    });
-  }
-}
-
-
-function getUsers(req,res){
-  res.json({
-    content
-  })
-}
+app.use("/api/user", userRouter);
+app.use("/api/auth", authRouter);
 
 app.use(function(req,res){
-    res.status(404).sendFile(__dirname+"/404.html");
+  res.status(404).sendFile(__dirname,"/404.html")
 })
+
+// userRouter.route("/")
+//     .get(protectRoute,getUsers)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function loginUser(req, res, next) {
+//   let userDetails = req.body;
+//   let { email, password } = userDetails;
+
+  
+//   let obj = content.find((obj) => {
+//     return obj.email == email;
+//   });
+  
+//   if (obj != undefined) {
+//     if (obj.password == password) {
+//       const token = jwt.sign({ obj: obj.email }, JWT_SECRET);
+//       console.log("80",token);
+//       res.cookie('jwt',token)
+//       res.send({
+//         message: "you have acces,correct email and pswrd",
+//         obj,
+//       });
+//     } else {
+//       res.send({
+//         message: "Invalid password or email",
+//       });
+//     }
+//   } else {
+//     return res.status(404).json({
+//       message: "User not found",
+//     });
+//   }
+// }
+
+
+// function getUsers(req,res){
+//   res.json({
+//     content
+//   })
+// }
+
+// app.use(function(req,res){
+//     res.status(404).sendFile(__dirname+"/404.html");
+// })
 
 
 
