@@ -4,7 +4,7 @@ const {JWT_SECRET} = require("../secrets");
 module.exports.protectRoute=function (req,res,next){
     try{
       //cookie - parser
-      console.log("99",req.cookies);
+      console.log("99",req.cookies); // this comes because of cookie-parse 
       // jwt 
       // -> verify everytime that if 
       // you are bringing the token to get your response
@@ -38,3 +38,7 @@ module.exports.bodyChecker = function (req, res, next) {
       res.send("kind send details in body ");
     }
   }
+
+
+
+

@@ -4,6 +4,7 @@ const { JWT_SECRET } = require("../secrets");
 const userModel = require("../model/userModel")
 const { bodyChecker } = require("./utilFns");
 const emailSender = require("../helpers/emailSender");
+
 // router
 const authRouter = express.Router();
 
@@ -37,7 +38,7 @@ async function loginUser(req, res) {
         if (user) {
             // password
             if (user.password == password) {
-                let token = jwt.sign({ id: user["_id"] }, JWT_SECRET, { httpOnly: true })
+                let token = jwt.sign({ id: user["_id"] }, JWT_SECRET)
 
                 res.cookie("JWT", token);
                 res.status(200).json({
@@ -72,7 +73,7 @@ async function forgetPassword(req, res) {
             (Math.floor(Math.random() * 10000) + 10000)
                 .toString().substring(1);
                 // date.now ->300
-            let updateRes = await userModel.updateOne({ email }, { token,validUpto })
+            let updateRes = await userModel.updateOne({ email }, { token})//adds token 
             //    console.log("updateQuery",updateRes)
             // 
             let newUser = await userModel.findOne({ email });
@@ -113,17 +114,22 @@ async function resetPassword(req, res) {
         if (user) {
             // await userModel.updateOne({ token }, {
             //     token: undefined,
-            //     password: password,
+            //     password: password,  // this code didmt work even on providing confirmpwd and pwd different it was working
             //     confirmPassword: confirmPassword,
             // },{runValidators:true} )
             // server
+
+            // user.password = password;
+            // user.confirmPassword = confirmPassword;
+            // user.token = undefined
+
             user.resetHandler(password,confirmPassword);
             // database entry 
-            await user.save();
+            await user.save()
             let newUser = await userModel.findOne({ email: user.email });
             // console.log("newUser", newUser)
             // email
-            // email send
+            // email send   
             // await emailSender(token, user.email);
             res.status(200).json({
                 message: "user token send to your email",

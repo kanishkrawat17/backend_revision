@@ -50,9 +50,10 @@ const userSchema = new mongoose.Schema(
     validUpto : Date
   })
 
-  // hook
+  // hook-> before getting saved into database make confirm pwd undefined
 userSchema.pre('save',function(next){
     this.confirmPassword = undefined;
+    next(); 
 })
 
 // ?? How did this happend ??
@@ -65,3 +66,6 @@ userSchema.methods.resetHandler = function (password, confirmPassword) {
 const userModel = mongoose.model('userModel', userSchema);
 
 module.exports=userModel;
+
+
+

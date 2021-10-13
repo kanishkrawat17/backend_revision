@@ -3,7 +3,7 @@ const {JWT_SECRET} = require("./secrets.js");
 const userModel = require("./model/userModel")
 
 
-
+// npm i express
 const express = require("express");//1
 const app = express();
 const fs = require("fs");//1
@@ -14,9 +14,10 @@ const authRouter = require("./Router/authRouter")
 app.listen("8081", () => {
   console.log("App is listening on port number 8081");
 });
-
+// inbuilt methods of express has already have next implemented 
+// .always use me 
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser()); // npm i cookie-parser
 app.use(express.static("Frontend-folder"));
 
 app.use("/api/user", userRouter);
@@ -25,6 +26,15 @@ app.use("/api/auth", authRouter);
 app.use(function(req,res){
   res.status(404).sendFile(__dirname,"/404.html")
 })
+
+
+
+// app.use(function (req, res) {
+//   // console.log("fullPath", fullPath);
+//   res.status(404).sendFile
+//       (path.join(__dirname, "404.html"));
+// })
+
 
 // userRouter.route("/")
 //     .get(protectRoute,getUsers)
@@ -39,7 +49,9 @@ app.use(function(req,res){
 
 
 
-
+app.use(function(req,res){
+  res.status(404).sendFile(__dirname , '/404.html')
+})
 
 
 
