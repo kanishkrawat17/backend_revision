@@ -37,7 +37,7 @@ async function loginUser(req, res) {
         if (user) {
             // password
             if (user.password == password) {
-                let token = jwt.sign({ id: user["_id"] }, JWT_SECRET)
+                let token = jwt.sign({ id: user["_id"] }, JWT_SECRET); 
 
                 res.cookie("JWT", token);
                 res.status(200).json({

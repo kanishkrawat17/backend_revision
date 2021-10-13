@@ -7,11 +7,13 @@ module.exports.protectRoute=function (req,res,next){
       console.log("99",req.cookies); // this comes because of cookie-parse 
       // jwt 
       // -> verify everytime that if 
-      // you are bringing the token to get your response
+      // you are bringing the token to get your response , req.cookie are coming bcs of json webtoken
       let decryptedToken = jwt.verify(req.cookies.jwt, JWT_SECRET);
       console.log("101",decryptedToken);
       
       if(decryptedToken){
+        let userId = decryptedToken.id; // this is bcs to check for authorized thing bcs in payload while loggin in we are sending JWT to client side in which payload has userID (mongoDB)
+        req.userId = userId;
         next();
       } else{
         res.send({

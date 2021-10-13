@@ -47,7 +47,12 @@ const userSchema = new mongoose.Schema(
         type : String
     },
     token : String,
-    validUpto : Date
+    validUpto : Date,
+    role : {
+        type:String,
+        enum  : ["admin", "ce"],
+        default : "user"
+    }
   })
 
   // hook-> before getting saved into database make confirm pwd undefined
