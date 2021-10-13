@@ -11,7 +11,6 @@ const authRouter = express.Router();
 // routes 
 authRouter.use(bodyChecker)
 authRouter.route("/signup").post(signupUser);
-
 authRouter.route("/login").post(loginUser);
 authRouter.route("/forgetPassword").post(forgetPassword)
 authRouter.route("/resetPassword").post(resetPassword);
